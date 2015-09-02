@@ -1,0 +1,23 @@
+{
+  "name": "simpleHttp",
+  "version": "0.0.1",
+  "description": "通用的高性能http服务器",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hwzhang92/simpleHttp.git"
+  },
+  "keywords": [
+    "http",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hwzhang92/simpleHttp/issues"
+  },
+  "homepage": "https://github.com/hwzhang92/simpleHttp"
+}
