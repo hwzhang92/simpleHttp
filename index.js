@@ -21,7 +21,9 @@ function onRequest(request, response){
 					stream.on('error',function(err){
 						return page_500(request,response,err);
 					})
-					response.writeHead(200,{'Content-Type':(mime[pathname.split('.').pop()]||'text/plain')+'; charset=utf-8'});
+					var ext = path.extname(pathname);
+					ext = ext ? ext.slice(1) : "unknown";
+					response.writeHead(200,{'Content-Type':mime[ext] || mime["unknown"]+'; charset=utf-8'});
 					stream.pipe(response);
 				}
 			})
