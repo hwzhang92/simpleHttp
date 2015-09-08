@@ -3,6 +3,7 @@ var url = require('url');
 var path = require('path');
 var util = require('util');
 var fs = require('fs');
+var zlib = require('zlib');
 var config = require('./conf/config.js');
 var mime = require('./mime.json');
 function onRequest(request, response){
@@ -23,8 +24,20 @@ function onRequest(request, response){
 					})
 					var ext = path.extname(pathname);
 					ext = ext ? ext.slice(1) : "unknown";
-					response.writeHead(200,{'Content-Type':mime[ext] || mime["unknown"]+'; charset=utf-8'});
-					stream.pipe(response);
+					if(config.compress && config.compress.test(ext)){
+						var acceptEncoding = request.headers['accept-encoding'] || "";
+						if(acceptEncoding.match(/\bgzip\b/)){
+							response.writeHead(200,{'Content-Type':(mime[ext] || mime["unknown"])+'; charset=utf-8','Content-Encoding':'gzip'});
+							stream.pipe(zlib.createGzip()).pipe(response);
+						}else if(acceptEncoding.match(/\bdeflate\b/)){
+							response.writeHead(200,{'Content-Type':(mime[ext] || mime["unknown"])+'; charset=utf-8','Content-Encoding':'deflate'});
+							stream.pipe(zlib.createDeflate()).pipe(response);
+						}
+					}else{
+						response.writeHead(200,{'Content-Type':(mime[ext] || mime["unknown"])+'; charset=utf-8'});
+						stream.pipe(response);
+					}
+					
 				}
 			})
 		}else{
